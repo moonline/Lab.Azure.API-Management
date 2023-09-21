@@ -1,5 +1,6 @@
 # Lab.Azure.API-Management
-A basic API Management example with Azure Functions and FastAPI 
+
+A basic API Management example with Azure Functions, Cosmos DB and Azure Resource Manager
 
 
 ## Development
