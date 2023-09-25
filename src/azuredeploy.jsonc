@@ -20,9 +20,13 @@
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-05-01",
+            "apiVersion": "2022-09-01",
             "name": "[variables('storageAccountName')]",
             "location": "[parameters('location')]",
+            "tags": {
+                "application": "concerts",
+                "env": "dev"
+            },
             "sku": {
                 "name": "Standard_LRS"
             },
@@ -34,9 +38,13 @@
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2022-09-01",
             "name": "[variables('appName')]",
             "location": "[parameters('location')]",
+            "tags": {
+                "application": "concerts",
+                "env": "dev"
+            },
             "sku": {
                 "name": "Y1",
                 "tier": "Dynamic"
@@ -48,6 +56,10 @@
             "apiVersion": "2020-02-02",
             "name": "[variables('appName')]",
             "location": "[parameters('location')]",
+            "tags": {
+                "application": "concerts",
+                "env": "dev"
+            },
             "kind": "web",
             "properties": {
                 "Application_Type": "web",
@@ -56,7 +68,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2022-09-01",
             "name": "[variables('appName')]",
             "location": "[parameters('location')]",
             "kind": "functionapp",
@@ -102,49 +114,28 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('appName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ]
-        },
-        // TODO https://benalexkeen.com/automated-deployment-of-serverless-python-web-apis-using-azure-functions-and-azure-devops/
+        } /*
+        TODO fix as failing with internal server error,
+        // https://benalexkeen.com/automated-deployment-of-serverless-python-web-apis-using-azure-functions-and-azure-devops/
         {
             "type": "Microsoft.Web/sites/functions",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2022-09-01",
             "name": "[format('{0}/ConcertsApiHandler', variables('appName'))]",
+            "tags": {
+                "application": "concerts",
+                "env": "dev"
+            },
             "properties": {
-                "config_href": "./ConcertsApiHandler/function.json",
+                "script_href": "ConcertsApiHandler/__init__.py",
+                "config_href": "ConcertsApiHandler/function.json",
                 "language": "python",
-                "isDisabled": false,
-                /*"config": {
-                    "disabled": false,
-                    "bindings": [
-                        {
-                            "name": "req",
-                            "type": "httpTrigger",
-                            "direction": "in",
-                            "authLevel": "function",
-                            "methods": [
-                                "get", "post"
-                            ]
-                        },
-                        {
-                            "name": "$return",
-                            "type": "http",
-                            "direction": "out"
-                        }
-                    ]
-                },*/
-                "files": {
-                    "__init__.py": "./ConcertsApiHandler/__init__.py",
-                    "controller/__init__.py": "[loadTextContent('./ConcertsApiHandler/controller/__init__.py')]",
-                    "controller/concerts_controller.py": "[loadTextContent('./ConcertsApiHandler/controller/concerts_controller.py')]",
-                    "controller/concerts_validator.py": "[loadTextContent('./ConcertsApiHandler/controller/concerts_validator.py')]",
-                    "model/__init__.py": "[loadTextContent('./ConcertsApiHandler/model/__init__.py')]",
-                    "model/concert.py": "[loadTextContent('./ConcertsApiHandler/model/concert.py')]",
-                    "repository/__init__.py": "[loadTextContent('./ConcertsApiHandler/repository/__init__.py')]",
-                    "repository/concerts_repository.py": "[loadTextContent('./ConcertsApiHandler/repository/concerts_repository.py')]"
-                }
+                "isDisabled": false
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('appName'))]"
             ]
-        }
-    ]
+        }*/
+    ],
+
+    "outputs": {}
 }

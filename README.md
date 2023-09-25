@@ -52,12 +52,19 @@ Execute the ConcertsApiHandler function from the Azure workspace tab or open [lo
 
 ### Deployment
 
+[Login to Azure](https://rakesh-suryawanshi.medium.com/login-to-azure-subscription-from-vscode-988f82c9eee3) from Visual Studio Code
+
 ```sh
 # Create a resource group for the deployment
 az group create --name "ConcertsDev" --location "germanywestcentral"
 
 # Deploy the application
 az deployment group create --resource-group "ConcertsDev" --template-file "azuredeploy.jsonc"
+
+# Zip and deploy the application code
+zip -r "ConcertsApiHandler.zip" "./ConcertsApiHandler"
+az functionapp deployment source config-zip \
+	-g "ConcertsDev" -n "Concerts/ConcertsApiHandler" --src "./ConcertsApiHandler.zip"
 ```
 
 ### Cleanup
@@ -69,7 +76,9 @@ az group delete --name "ConcertsDev"
 
 ## Resources
 
+* [Login to Azure Subscription from VSCode](https://rakesh-suryawanshi.medium.com/login-to-azure-subscription-from-vscode-988f82c9eee3)
 * [Quickstart: Create a function in Azure with Python using Visual Studio Code](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-python?pivots=python-mode-configuration)
 * [Tutorial: Create and deploy your first ARM template](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-create-first-template?tabs=azure-powershell)
 * [Quickstart: Create and deploy Azure Functions resources from an ARM template](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-first-function-resource-manager?tabs=azure-cli)
 * [Azure Function app and an HTTP-triggered function](https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.web/function-http-trigger)
+* [Deploying Azure Functions with the Azure CLI](https://markheath.net/post/deploying-azure-functions-with-azure-cli)
